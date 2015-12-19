@@ -84,7 +84,7 @@ action :create_or_update do
       unless found
         update_host = true
         Chef::Log.debug 'Hostinterface to be removed'
-        Chef::Log.debug cur_int
+        #Chef::Log.debug cur_int
       end
 
       if update_host
