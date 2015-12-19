@@ -68,7 +68,6 @@ action :create_or_update do
       unless found
         update_host = true
         Chef::Log.debug 'New hostinterface required'
-        Chef::Log.debug new_int
       end
 
       # Existing interfaces that should be removed?
