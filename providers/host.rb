@@ -242,7 +242,7 @@ action :update do
         result = connection.query(make_groups_request)
         # And now fetch the newly made group to be sure it worked
         # and for later use
-        group = connection.query(get_groups_request)
+        group = connection.query(get_desired_groups_request)
         Chef::Log.error('Error creating groups, see Chef errors') if result.nil?
       elsif !group['name'].nil?
         Chef::Log.info "Group #{desired_group} already exists"
