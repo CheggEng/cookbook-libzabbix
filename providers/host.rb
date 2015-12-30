@@ -231,9 +231,6 @@ action :update do
       }
       group = connection.query(get_desired_groups_request).first
       #if group missing, create it
-      pp "Debug Group"
-      pp group
-      pp new_resource
       if group.nil? && new_resource.create_missing_groups
         Chef::Log.info "Creating group #{desired_group}"
         make_groups_request = {
