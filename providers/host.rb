@@ -247,7 +247,7 @@ action :update do
         # and for later use
         group = connection.query(get_groups_request)
         Chef::Log.error('Error creating groups, see Chef errors') if result.nil?
-      elsif group.length == 1
+      elsif !group['name'].nil?
         Chef::Log.info "Group #{desired_group} already exists"
       else
         Chef::Application.fatal! "Could not find group, #{desired_group}, for this host and \"create_missing_groups\" is False (or unset)"
