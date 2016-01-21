@@ -143,35 +143,22 @@ action :create do
       end
     end
 
-    if new_resource.templates.empty? && new_resource.parameters[:templates].empty?
-      Chef::Log.warn 'Empty Zabbix template list for this host - not searching to see if templates exist'
-      templates = {}
+    if new_resource.templates.empty?
+      template_names = new_resource.parameters[:templates]
     else
-      if new_resource.templates.empty?
-        template_names = new_resource.parameters[:templates]
-      else
-        template_names = new_resource.templates
-      end
-      get_templates_request = {
+      template_names = new_resource.templates
+    end
+    desired_templates = template_names.reduce([]) do |acc, desired_template|
+      get_desired_templates_request = {
         :method => 'template.get',
         :params => {
-          :output => 'extend',
           :filter => {
-            :name => template_names
+            :host => desired_template
           }
         }
       }
-
-      templates = Hash[connection.query(get_templates_request).map { |template| [template['templateid'], template['name']] }]
-      if templates.length != template_names.length
-        missing_elements = template_names - templates.values
-        Chef::Application.fatal! "Cannot find all templates associated with host, missing : #{missing_elements}"
-      end
-    end
-
-    templates_to_send = []
-    templates.keys.each do |key|
-      templates_to_send.concat([{ 'templateid' => key }])
+      template = connection.query(get_desired_templates_request)
+      acc << template
     end
 
     if new_resource.interfaces.empty?
@@ -185,7 +172,7 @@ action :create do
       :params => {
         :host => new_resource.hostname,
         :groups => groups,
-        :templates => templates_to_send,
+        :templates => desired_templates.flatten,
         :interfaces => interfaces.map(&:to_hash),
         :macros => format_macros(new_resource.macros)
       }
