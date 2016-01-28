@@ -263,6 +263,9 @@ action :update do
       interfaces = new_resource.interfaces
     end
 
+    #Lets debug logs
+    Chef::Log.warn "Interface list: #{interfaces}"
+
     existing_interfaces = host['interfaces'].map { |interface| Chef::Zabbix::API::HostInterface.from_api_response(interface).to_hash }
     new_host_interfaces = determine_new_host_interfaces(existing_interfaces, interfaces.map(&:to_hash))
     new_host_interfaces.each do |interface|
@@ -271,8 +274,7 @@ action :update do
         :params => interface.merge(:hostid => host['hostid'])
 
       }
-      Chef::Log.info "Creating new interface on #{host['hostid']}"
-      pp interface
+      Chef::Log.warn "Creating new interface on #{host['hostid']}: #{interface}"
       connection.query(create_interface_request)
     end
 
