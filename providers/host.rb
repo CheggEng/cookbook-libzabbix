@@ -196,7 +196,7 @@ action :create do
 
       if !proxy['hostid'].nil? and proxy['hostid'] > 0
         #parse proxy host id
-        request[:params][:proxy_hostid] = proxy['hostid']
+        request[:params][:proxy_hostid] = proxy['hostid'].to_i
       end
     end
 
@@ -326,7 +326,7 @@ action :update do
       }
       proxy = connection.query(get_proxy_host_id)
 
-      if !proxy['hostid'].nil? and proxy['hostid'] > 0
+      if !proxy['hostid'].nil? and proxy['hostid'].to_i > 0
         #parse proxy host id
         host_update_request[:params][:proxy_hostid] = proxy['hostid']
       end
