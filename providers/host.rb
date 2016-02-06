@@ -335,7 +335,8 @@ action :update do
         end
       end
     end
-
+pp 'Debug Update'
+pp host_update_request
     connection.query(host_update_request)
 
   end
