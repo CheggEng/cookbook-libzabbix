@@ -182,22 +182,21 @@ action :create do
     if !new_resource.parameters[:proxy].empty?
       #find proxy_host_id
       get_proxy_host_id = {
-        :method => 'host.get',
+        :method => 'proxy.get',
         :params => {
           :filter => {
             :host => new_resource.parameters[:proxy]
           },
+          :output           => 'extend',
           :selectInterfaces => 'extend',
-          :selectGroups => 'extend',
-          :selectParentTemplates => 'extend'
         }
       }
       proxy = connection.query(get_proxy_host_id)
 
       if !proxy.nil?
-        if !proxy[0]['hostid'].nil?
+        if !proxy[0]['proxyid'].nil?
           #parse proxy host id
-          host_update_request[:params][:proxy_hostid] = proxy[0]['hostid']
+          host_update_request[:params][:proxy_hostid] = proxy[0]['proxyid']
         end
       end
     end
@@ -316,28 +315,25 @@ action :update do
     if !new_resource.parameters[:proxy].empty?
       #find proxy_host_id
       get_proxy_host_id = {
-        :method => 'host.get',
+        :method => 'proxy.get',
         :params => {
           :filter => {
             :host => new_resource.parameters[:proxy]
           },
+          :output           => 'extend',
           :selectInterfaces => 'extend',
-          :selectGroups => 'extend',
-          :selectParentTemplates => 'extend'
         }
       }
       proxy = connection.query(get_proxy_host_id)
 
       if !proxy.nil?
-        if !proxy[0]['hostid'].nil?
+        if !proxy[0]['proxyid'].nil?
           #parse proxy host id
-          host_update_request[:params][:proxy_hostid] = proxy[0]['hostid']
+          host_update_request[:params][:proxy_hostid] = proxy[0]['proxyid']
         end
       end
     end
-pp 'Debug Update'
     result = connection.query(host_update_request)
-pp result
 
   end
   new_resource.updated_by_last_action(true)
