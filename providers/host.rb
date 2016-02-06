@@ -336,8 +336,8 @@ action :update do
       end
     end
 pp 'Debug Update'
-pp host_update_request
-    connection.query(host_update_request)
+    result = connection.query(host_update_request)
+pp result
 
   end
   new_resource.updated_by_last_action(true)
