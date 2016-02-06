@@ -327,9 +327,11 @@ action :update do
       proxy = connection.query(get_proxy_host_id)
 pp 'debug proxy'
 pp proxy
-      if !proxy.nil? and !proxy[0]['hostid'].nil?
-        #parse proxy host id
-        host_update_request[:params][:proxy_hostid] = proxy['hostid']
+      if !proxy.nil?
+        if !proxy[0]['hostid'].nil?
+          #parse proxy host id
+          host_update_request[:params][:proxy_hostid] = proxy['hostid']
+        end
       end
     end
 
