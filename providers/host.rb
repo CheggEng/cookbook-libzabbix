@@ -185,7 +185,7 @@ action :create do
         :method => 'host.get',
         :params => {
           :filter => {
-            :host => new_resource.proxy
+            :host => new_resource.parameters[:proxy]
           },
           :selectInterfaces => 'extend',
           :selectGroups => 'extend',
@@ -317,7 +317,7 @@ action :update do
         :method => 'host.get',
         :params => {
           :filter => {
-            :host => new_resource.proxy
+            :host => new_resource.parameters[:proxy]
           },
           :selectInterfaces => 'extend',
           :selectGroups => 'extend',
