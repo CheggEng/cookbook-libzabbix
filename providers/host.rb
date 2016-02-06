@@ -185,20 +185,19 @@ action :create do
         :method => 'host.get',
         :params => {
           :filter => {
-            :host => new_resource.hostname
+            :host => new_resource.proxy
           },
-          :selectParentTemplates => ['host'],
-          :selectInterfaces => ['main', 'type', 'useip', 'ip', 'dns', 'port'],
-          :selectGroups => ['name']
+          :selectInterfaces => 'extend',
+          :selectGroups => 'extend',
+          :selectParentTemplates => 'extend'
         }
       }
-      hosts = connection.query(get_host_request)
+      proxy = connection.query(get_proxy_host_id)
 
-      if hosts.size > 0
+      if !proxy['hostid'].nil? and proxy['hostid'] > 0
         #parse proxy host id
+        request[:params][:proxy_hostid] = proxy['hostid']
       end
-
-      request[:params][:proxy_hostid] = new_resource.proxy
     end
 
     Chef::Log.info 'Creating new Zabbix entry for this host'
@@ -310,6 +309,29 @@ action :update do
         :templates => desired_templates.flatten,
       }
     }
+
+    #Set proxy if we have one
+    if !new_resource.proxy.empty?
+      #find proxy_host_id
+      get_proxy_host_id = {
+        :method => 'host.get',
+        :params => {
+          :filter => {
+            :host => new_resource.proxy
+          },
+          :selectInterfaces => 'extend',
+          :selectGroups => 'extend',
+          :selectParentTemplates => 'extend'
+        }
+      }
+      proxy = connection.query(get_proxy_host_id)
+
+      if !proxy['hostid'].nil? and proxy['hostid'] > 0
+        #parse proxy host id
+        host_update_request[:params][:proxy_hostid] = proxy['hostid']
+      end
+    end
+
     connection.query(host_update_request)
 
   end
