@@ -177,6 +177,30 @@ action :create do
         :macros => format_macros(new_resource.macros)
       }
     }
+
+    #Set proxy if we have one
+    if !new_resource.proxy.empty?
+      #find proxy_host_id
+      get_proxy_host_id = {
+        :method => 'host.get',
+        :params => {
+          :filter => {
+            :host => new_resource.hostname
+          },
+          :selectParentTemplates => ['host'],
+          :selectInterfaces => ['main', 'type', 'useip', 'ip', 'dns', 'port'],
+          :selectGroups => ['name']
+        }
+      }
+      hosts = connection.query(get_host_request)
+
+      if hosts.size > 0
+        #parse proxy host id
+      end
+
+      request[:params][:proxy_hostid] = new_resource.proxy
+    end
+
     Chef::Log.info 'Creating new Zabbix entry for this host'
     connection.query(request)
   end
