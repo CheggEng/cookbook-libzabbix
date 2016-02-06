@@ -179,7 +179,7 @@ action :create do
     }
 
     #Set proxy if we have one
-    if !new_resource.proxy.empty?
+    if !new_resource.parameters[:proxy].empty?
       #find proxy_host_id
       get_proxy_host_id = {
         :method => 'host.get',
@@ -311,7 +311,7 @@ action :update do
     }
 
     #Set proxy if we have one
-    if !new_resource.proxy.empty?
+    if !new_resource.parameters[:proxy].empty?
       #find proxy_host_id
       get_proxy_host_id = {
         :method => 'host.get',
