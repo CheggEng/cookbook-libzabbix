@@ -196,7 +196,7 @@ action :create do
       if !proxy.nil?
         if !proxy[0]['proxyid'].nil?
           #parse proxy host id
-          host_update_request[:params][:proxy_hostid] = proxy[0]['proxyid']
+          request[:params][:proxy_hostid] = proxy[0]['proxyid']
         end
       end
     end
