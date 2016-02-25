@@ -341,9 +341,6 @@ action :update do
       }
     }
 
-    pp "Debug host update"
-    pp host_update_request
-
     #Set proxy if we have one
     if !new_resource.parameters[:proxy].empty?
       #find proxy_host_id
