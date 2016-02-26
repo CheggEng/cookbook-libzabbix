@@ -31,23 +31,23 @@ action :create_or_update do
       end
 
       pp "Debug template issues"
-      pp new_resource.templates
+      pp new_resource.parameters[:templates]
       #merge old and new templates so if a template is added
       #via the webinterface we don't remove it here
       hosts[0]['parentTemplates'].each do |tmpl|
         match = false
-        new_resource.templates.each do |nt|
+        new_resource.parameters[:templates].each do |nt|
           if tmpl['host'] == nt
             match = true
           end
         end
         if !match
-          new_resource.templates << tmpl['host']
+          new_resource.parameters[:templates] << tmpl['host']
         end
       end
 
       pp "After Change"
-      pp new_resource.templates
+      pp new_resource.parameters[:templates]
 
       # Compare groups
       current_groups = []
@@ -65,13 +65,13 @@ action :create_or_update do
       #via the webinterface we don't remove it here
       hosts[0]['groups'].each do |cg|
         match = false
-        new_resource.groups.each do |ng|
+        new_resource.parameters[:groupNames].each do |ng|
           if cg['name'] == ng
             match = true
           end
         end
         if !match
-          new_resource.groups << cg['name']
+          new_resource.parameters[:groupNames] << cg['name']
         end
       end
 
