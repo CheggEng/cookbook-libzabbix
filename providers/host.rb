@@ -30,8 +30,6 @@ action :create_or_update do
         Chef::Log.debug 'Current templates and new templates differ'
       end
 
-      pp "Debug template issues"
-      pp new_resource.parameters[:templates]
       #merge old and new templates so if a template is added
       #via the webinterface we don't remove it here
       hosts[0]['parentTemplates'].each do |tmpl|
@@ -45,9 +43,6 @@ action :create_or_update do
           new_resource.parameters[:templates] << tmpl['host']
         end
       end
-
-      pp "After Change"
-      pp new_resource.parameters[:templates]
 
       # Compare groups
       current_groups = []
