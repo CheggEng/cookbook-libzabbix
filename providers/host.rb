@@ -30,7 +30,24 @@ action :create_or_update do
         Chef::Log.debug 'Current templates and new templates differ'
       end
 
+      pp "Debug template issues"
+      pp new_resource.templates
+      #merge old and new templates so if a template is added
+      #via the webinterface we don't remove it here
+      hosts[0]['parentTemplates'].each do |tmpl|
+        match = false
+        new_resource.templates.each do |nt|
+          if tmpl['host'] == nt
+            match = true
+          end
+        end
+        if !match
+          new_resource.templates << tmpl['host']
+        end
+      end
 
+      pp "After Change"
+      pp new_resource.templates
 
       # Compare groups
       current_groups = []
@@ -43,6 +60,20 @@ action :create_or_update do
         Chef::Log.debug 'Current groups and new groups differ'
       end
 
+
+      #merge old and new groups so if a group is added
+      #via the webinterface we don't remove it here
+      hosts[0]['groups'].each do |cg|
+        match = false
+        new_resource.groups.each do |ng|
+          if cg['name'] == ng
+            match = true
+          end
+        end
+        if !match
+          new_resource.groups << cg['name']
+        end
+      end
 
 
       # Compare interfaces
