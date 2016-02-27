@@ -40,7 +40,7 @@ action :create_or_update do
           end
         end
         if !match
-          new_resource.parameters[:templates] << tmpl['host']
+          new_resource.default.parameters[:templates] << tmpl['host']
         end
       end
 
@@ -66,7 +66,7 @@ action :create_or_update do
           end
         end
         if !match
-          new_resource.parameters[:groupNames] << cg['name']
+          new_resource.default.parameters[:groupNames] << cg['name']
         end
       end
 
