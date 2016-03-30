@@ -174,6 +174,7 @@ action :create do
         :groups => groups,
         :templates => desired_templates.flatten,
         :interfaces => interfaces.map(&:to_hash),
+        :inventory_mode => 1,
         :macros => format_macros(new_resource.macros)
       }
     }
@@ -307,6 +308,7 @@ action :update do
       :params => {
         :hostid => host['hostid'],
         :groups => desired_groups,
+        :inventory_mode => 1,
         :templates => desired_templates.flatten,
       }
     }
